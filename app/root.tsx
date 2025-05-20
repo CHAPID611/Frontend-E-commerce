@@ -6,9 +6,13 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { Suspense } from "react";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { Provider } from "./components/ui/provider";
+import { Box, Flex } from "@chakra-ui/react";
+import Navbar from "./components/ui/navbar";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -41,8 +45,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+  </div>
+);
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <Provider>
+      <Flex direction="column" minH="100vh" bg={{base:"white", _dark:"black"}}>
+        <Navbar />
+        <Box flex="1" p={4}>
+          <Suspense fallback={<LoadingSpinner />}>
+            <Outlet />
+          </Suspense>
+        </Box>
+      </Flex>
+    </Provider> 
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
