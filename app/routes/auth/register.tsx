@@ -23,19 +23,21 @@ export default function Register() {
         setError("");
         setSuccess("");
         
-        console.log("📤 Enviando datos de registro:", data);
-        
         const result = await registerUser(data);
         
-        if (result.success) {
+        if (result.success && result.user) {
+            const user = result.user;
             setSuccess("¡Usuario registrado exitosamente! Redirigiendo...");
-            console.log("✅ Registro exitoso");
             setTimeout(() => {
-                navigate("/home");
+                // Redirigir según el rol del usuario
+                if (user.role === 'ADMIN' || user.role === 'SELLER') {
+                    navigate("/admin/products");
+                } else {
+                    navigate("/");
+                }
             }, 2000);
         } else {
             setError(result.error || "Error al registrarse");
-            console.error("❌ Error en registro:", result.error);
         }
     };
 

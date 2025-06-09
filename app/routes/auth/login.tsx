@@ -23,8 +23,13 @@ export default function Login() {
         setError("");
         const result = await login(data);
         
-        if (result.success) {
-            navigate("/home");
+        if (result.success && result.user) {
+            // Redirigir según el rol del usuario
+            if (result.user.role === 'ADMIN' || result.user.role === 'SELLER') {
+                navigate("/admin/products");
+            } else {
+                navigate("/");
+            }
         } else {
             setError(result.error || "Error al iniciar sesión");
         }

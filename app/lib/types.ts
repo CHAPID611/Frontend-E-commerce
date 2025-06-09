@@ -21,4 +21,54 @@ export interface RegisterInput {
   password: string;
   firstName: string;
   lastName: string;
+}
+
+// Product types
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  mainImageUrl: string;
+  imageUrls: string[];
+  category: Category;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface CreateProductInput {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  mainImageUrl: string;
+  imageUrls?: string[];
+  categoryId: string;
+}
+
+export interface UpdateProductInput {
+  name?: string;
+  description?: string;
+  price?: number;
+  stock?: number;
+  mainImageUrl?: string;
+  imageUrls?: string[];
+  categoryId?: string;
+}
+
+export interface CreateCategoryInput {
+  name: string;
+  description: string;
+}
+
+export enum SortOrder {
+  ASC = 'ASC',
+  DESC = 'DESC'
 } 
