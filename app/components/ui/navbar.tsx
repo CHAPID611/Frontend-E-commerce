@@ -44,6 +44,9 @@ export default function Navbar() {
                     <Link to="/">
                         <Button variant="ghost">Inicio</Button>
                     </Link>
+                    <Link to="/cart">
+                        <Button variant="ghost">Carrito</Button>
+                    </Link>
                     <Link to="/login">
                         <Button variant="ghost">Iniciar Sesión</Button>
                     </Link>
