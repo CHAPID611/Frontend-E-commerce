@@ -7,12 +7,15 @@ import {
   ScrollRestoration,
 } from "react-router";
 import { Suspense } from "react";
+import { ApolloProvider } from '@apollo/client';
 
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Provider } from "./components/ui/provider";
 import { Box, Flex } from "@chakra-ui/react";
 import Navbar from "./components/ui/navbar";
+import { AuthProvider } from "./hooks/useAuth";
+import { apolloUnifiedClient } from "./lib/apollo-unified";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -26,10 +29,9 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
-
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -41,9 +43,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <ScrollRestoration />
         <Scripts />
       </body>
-    </html>
+    </>
   );
 }
+
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-screen">
@@ -54,15 +57,19 @@ const LoadingSpinner = () => (
 export default function App() {
   return (
     <Provider>
-      <Flex direction="column" minH="100vh" bg={{base:"white", _dark:"black"}}>
-        <Navbar />
-        <Box flex="1" p={4}>
-          <Suspense fallback={<LoadingSpinner />}>
-            <Outlet />
-          </Suspense>
-        </Box>
-      </Flex>
-    </Provider> 
+      <ApolloProvider client={apolloUnifiedClient}>
+        <AuthProvider>
+          <Flex direction="column" minH="100vh" bg={{base:"white", _dark:"black"}}>
+            <Navbar />
+            <Box flex="1" p={4}>
+              <Suspense fallback={<LoadingSpinner />}>
+                <Outlet />
+              </Suspense>
+            </Box>
+          </Flex>
+        </AuthProvider>
+      </ApolloProvider>
+    </Provider>
   );
 }
 

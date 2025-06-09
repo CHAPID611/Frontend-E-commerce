@@ -42,11 +42,39 @@ export function useColorModeValue<T>(light: T, dark: T) {
 
 export function ColorModeIcon() {
   const { colorMode } = useColorMode()
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return <LuSun />
+  }
+
   return colorMode === "dark" ? <LuMoon /> : <LuSun />
 }
 
 export function ColorModeButton() {
   const { colorMode, toggleColorMode } = useColorMode()
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <IconButton
+        variant="ghost"
+        aria-label="Toggle color mode"
+        size="sm"
+        disabled
+      >
+        <LuSun />
+      </IconButton>
+    )
+  }
 
   return (
     <IconButton
