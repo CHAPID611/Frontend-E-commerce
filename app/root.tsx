@@ -7,12 +7,15 @@ import {
   ScrollRestoration,
 } from "react-router";
 import { Suspense } from "react";
+import { ApolloProvider } from '@apollo/client';
 
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Provider } from "./components/ui/provider";
 import { Box, Flex } from "@chakra-ui/react";
 import Navbar from "./components/ui/navbar";
+import { AuthProvider } from "./hooks/useAuth";
+import { apolloClient } from "./lib/apollo";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -53,16 +56,20 @@ const LoadingSpinner = () => (
 
 export default function App() {
   return (
-    <Provider>
-      <Flex direction="column" minH="100vh" bg={{base:"white", _dark:"black"}}>
-        <Navbar />
-        <Box flex="1" p={4}>
-          <Suspense fallback={<LoadingSpinner />}>
-            <Outlet />
-          </Suspense>
-        </Box>
-      </Flex>
-    </Provider> 
+    <ApolloProvider client={apolloClient}>
+      <Provider>
+        <AuthProvider>
+          <Flex direction="column" minH="100vh" bg={{base:"white", _dark:"black"}}>
+            <Navbar />
+            <Box flex="1" p={4}>
+              <Suspense fallback={<LoadingSpinner />}>
+                <Outlet />
+              </Suspense>
+            </Box>
+          </Flex>
+        </AuthProvider>
+      </Provider>
+    </ApolloProvider>
   );
 }
 
